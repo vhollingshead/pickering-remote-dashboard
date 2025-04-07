@@ -118,8 +118,15 @@ if feeds and channel_info:
         # Calculate FCR using Van Haute's Model
         # df['log_FCR'] = df.apply(lambda row: van_haute_model(row['ORP (mV)'], row['pH']), axis=1)
         # df['FCR (mg/L)'] = 10 ** df['log_FCR']  # Convert log(FCR) to FCR
-        
+
+
+
+        # Location Selector
+        st.markdown("Choose the location for the sensors:")
+        # user_role = st.selectbox("", ["Select Your Role", "Community Member", "Technician", "Researcher", "NGO/Government"])
+        sensor_location = st.selectbox("", ["Pickering Lab", "Kenya Pilot 1", "Kenya Pilot 2"])
         # User Role Selection
+        
         st.markdown("Tell Us About Yourself:")
         # user_role = st.selectbox("", ["Select Your Role", "Community Member", "Technician", "Researcher", "NGO/Government"])
         user_role = st.selectbox("", ["Select Your Role", "Technician", "Researcher", "NGO/Government"])
@@ -141,7 +148,8 @@ if feeds and channel_info:
         #         st.image("replaceimage.png", caption="Water is Unsafe", use_column_width=True)
         
         # Display for Technician
-        if user_role == "Technician":
+        if sensor_location == "Pickering Lab":
+            if user_role == "Technician":
             last_fcr = df['FCR (mg/L)'].iloc[-1]
             st.subheader("Current Chlorine Status")
             color = "green" if last_fcr > safe_threshold_low and last_fcr < safe_threshold_high else "red"
@@ -152,7 +160,7 @@ if feeds and channel_info:
             st.line_chart(df[['created_at', 'FCR (mg/L)']].set_index('created_at')[-10:])
         
         # Display for Researcher
-        elif user_role == "Researcher":
+            elif user_role == "Researcher":
             st.write(f"FCR data from ThingSpeak Channel: {channel_info['name']}")
             # Display raw FCR data
             st.subheader("Raw FCR Data")
@@ -162,7 +170,7 @@ if feeds and channel_info:
             st.subheader("FCR Trend This Month")
             st.line_chart(df[['created_at', 'FCR (mg/L)']].set_index('created_at'))
         
-        elif user_role == "NGO/Government":
+            elif user_role == "NGO/Government":
             # st.title("NGO/Government Dashboard")
             
             # Local/Regional dropdown
